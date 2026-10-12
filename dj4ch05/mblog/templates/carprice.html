@@ -1,0 +1,53 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>二手車價格查詢</title>
+</head>
+
+<body>
+    <h2>歡迎光臨 DJ 二手車賣場</h2>
+
+    <!-- 車廠選單 -->
+    <table>
+        <tr>
+            {% for m in car_maker %}
+            <td bgcolor="#ccffcc">
+                <a href="{% url 'carprice-url' forloop.counter0 %}">
+                    {{ m }}
+                </a>
+            </td>
+            {% endfor %}
+        </tr>
+    </table>
+
+    <!-- 車款及價格 -->
+    {% if cars %}
+    <table border="1" cellpadding="8">
+        <tr bgcolor="#99ccff">
+            <th>車廠</th>
+            <th>車款</th>
+            <th>價格（元）</th>
+        </tr>
+
+        {% for c in cars %}
+        <tr bgcolor="{% cycle '#eeeeee' '#cccccc' %}">
+            <td>{{ maker_name }}</td>
+            <td>
+                {{ c.model }}
+            </td>
+            <td align='right'>NT${{ c.price | floatformat:2 |intcomma }}
+            <td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% else %}
+    <h3>車廠 <em>{{ maker_name }}</em> 目前無庫存車</h3>
+    {% endif %}
+
+</body>
+
+</html>

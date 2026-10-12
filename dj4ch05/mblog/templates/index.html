@@ -1,0 +1,68 @@
+<!-- index.html -->
+{% extends 'base.html' %}
+{% block title %}文學天地｜新聞直播{% endblock %}
+{% block headmessage %}
+<h3 style="font-family:微軟正黑體;">新聞直播｜中天、華視、民視、中視</h3>
+{% endblock %}
+{% block content %}
+<section id="news-live" style="font-family:微軟正黑體;">
+    <h4 class="mb-3">選擇新聞台</h4>
+    <div class="d-flex flex-wrap gap-2 mb-3" role="group" aria-label="新聞直播頻道">
+        <button type="button" class="btn btn-primary news-channel" data-name="中天" data-video-id="vr3XyVCR4T0"
+            aria-pressed="true">中天</button>
+        <button type="button" class="btn btn-outline-primary news-channel" data-name="華視" data-video-id="wM0g8EoUZ_E"
+            aria-pressed="false">華視</button>
+        <button type="button" class="btn btn-outline-primary news-channel" data-name="民視" data-video-id="MCnk4m2CliM"
+            aria-pressed="false">民視</button>
+        <button type="button" class="btn btn-outline-primary news-channel" data-name="中視" data-video-id="Z2mfmGIPh4Q"
+            aria-pressed="false">中視</button>
+    </div>
+    <h5 id="channel-title" aria-live="polite">目前選擇：中天新聞</h5>
+    <div class="ratio ratio-16x9 bg-dark">
+        <iframe width="933" height="525" id="news-player" src="https://www.youtube.com/embed/vr3XyVCR4T0" title="中天新聞"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+    <p class="mt-3">
+        若出現影片無法播放、Error 153 或直播已結束，可
+        <a id="watch-on-youtube" href="https://youtu.be/vr3XyVCR4T0" target="_blank" rel="noopener noreferrer">前往
+            YouTube 直接觀看</a>。
+        <small class="text-muted d-block mt-1">直播影片代碼可能變更，且是否允
+            許嵌入由 YouTube 及頻道決定。</small>
+    </p>
+</section>
+<hr class="my-4">
+<h4 style="font-family:標楷體;">本站文章列表</h4>
+{% for post in posts %}
+<p style="font-family:微軟正黑體;font-size:14pt;fontweight:bold;">
+    <a href="/post/{{ post.slug }}">{{ post.title }}</a>
+</p>
+{% endfor %}
+<script>
+    (function () {
+        'use strict';
+        var buttons = document.querySelectorAll('#news-live .news-channel');
+        var player = document.getElementById('news-player');
+        var title = document.getElementById('channel-title');
+        var youtubeLink = document.getElementById('watch-on-youtube');
+        buttons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                var videoId = button.getAttribute('data-video-id');
+                var channelName = button.getAttribute('data-name');
+                player.src = 'https://www.youtube.com/embed/' +
+                    encodeURIComponent(videoId) + '?playsinline=1';
+                player.title = channelName + ' YouTube 新聞直播';
+                title.textContent = '目前選擇：' + channelName + '新聞';
+                youtubeLink.href = 'https://www.youtube.com/watch?v=' + encodeURIComponent(videoId);
+                buttons.forEach(function (item) {
+                    var active = item === button;
+                    item.classList.toggle('btn-primary', active);
+                    item.classList.toggle('btn-outline-primary', !active);
+                    item.setAttribute('aria-pressed', String(active));
+                });
+            });
+        });
+    }());
+</script>
+{% endblock %}
